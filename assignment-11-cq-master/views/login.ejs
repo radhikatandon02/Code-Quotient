@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+        /* text-align: center; */
+    }
+      /* Navbar styling */
+      nav {
+        background-color: #b882f6;
+        overflow: hidden;
+      }
+
+      nav a {
+        float:left;
+        color: white;
+        text-align: center;
+        padding: 25px 30px;
+        text-decoration: none;
+      }
+
+      nav a:hover {
+        background-color: whitesmoke;
+        border-radius: 40px;
+        color: black;
+      }
+
+      /* Page content styling */
+      .container {
+        width: 450px;
+        height: 300px;
+        margin: auto;
+        outline: solid 4px #661abd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        box-shadow: 10px 10px 15px #a455ff;
+      }
+      
+
+      #login{
+        background-color: #d4afff;
+        border-radius: 6px; 
+        height: 35px; 
+        width: 90%; 
+        padding: 4px;
+        margin: 24px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav>
+        <!-- <a href="/">Home</a>
+        <a href="./contact">Contact</a>
+        <a href="./about">About</a>
+        <a href="./todo">Todo</a> -->
+        <a href="./login" style="float: right;">Login</a>
+        <a href="./signup" style="float: right;">Signup</a>
+    </nav>
+
+    <!-- Page content -->
+    <h1 style="text-align: center;">Login</h1>
+    <h3 style="text-align: center; color: red;"><%= msg %>!</h3>
+    <div class="container">
+      <div style="width: 90%;">
+        <form action="/login" method="post" style="width: 100%;">
+            <label for="email" style="text-align: left; padding: 4px; display: block; font-weight: bold;">username</label>
+            <input id="email" name="email" type="text" placeholder="Enter Username" style="height: 30px; width: 98%;" />
+
+            <label for="password" style="margin: 3px; text-align: left; padding: 4px; display: block; font-weight: bold;">password</label>
+            <input id="password" name="password" type="password" placeholder="Enter Password" style="height: 30px; width: 98%;" />
+
+            <div style="margin-top:22px; text-align: left;">
+                <a href="#" style="text-decoration: none;">Forgot Password?</a>
+            </div>
+            <div style="margin-top:-22px; text-align: right;">
+                <a href="./signup" style="text-decoration: none;">Signup</a>
+            </div>
+            <input type="submit" id="login" value="Login">
+        </form>
+    </div>
+
+      <!-- ...next code... --> 
+    </div>
+  </body>
+  <script src="/todoScript"></script>
+</html>

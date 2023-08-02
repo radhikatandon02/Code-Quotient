@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Website</title>
+    <style>
+      /* Page content styling */
+      .content {
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <!-- <nav>
+      <a href="Logout">Logout</a>
+      <a href="/">Home</a>
+      <h4 style="color: white; margin-top: 25px; margin-left: 54px;">Welcome <%= name %></h4>
+    </nav> -->
+    <%- include('partials/header', {name: name}); %>
+    <!-- Page content -->
+    <div class="content">
+      <h3>Here are the details you provided</h3>
+      <p>
+        Username : <%= name %>
+        <br>
+        <br>
+        Email : <%= email %>
+        <br>
+        <br>
+        Password : <%= pass %>
+        <br>
+        <br>
+        Phone Number : <%= phone %>
+      </p>
+    </div>
+  </body>
+  <script src="/todoScript"></script>
+
+</html>
