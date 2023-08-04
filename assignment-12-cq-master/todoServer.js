@@ -9,12 +9,23 @@ const multerStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
   },
-  filename: function (req, file, callback) {
-    callback(null, file.originalname);
+  filename: function (req, file, cb) {
+    // callback(null, file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + file.originalname);
   },
 });
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/png'];
 
-const upload = multer({ storage: multerStorage });
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only JPG and PNG images are allowed'));
+  }
+};
+
+const upload = multer({ storage: multerStorage, fileFilter: fileFilter});
 
 const app = express();
 
@@ -114,16 +125,31 @@ function saveTodoInFile(todo, callback) {
   });
 }
 
-
+ 
 app.delete('/todo/:id',(req,res) =>{
   readAllTodos(function (err, data) {
     if (err) {
       callback(err);
       return;
     }
-    
     const idToDelete = parseInt(req.params.id);
+    for(let i=0;i<data.length;i++)
+    {
+      if(data[i].id == idToDelete)
+      {
+        fs.unlink(data[i].profilePath, (err)=>{
+            if(err)
+            {
+              res.status(500).send("error");
+              return;
+            }
+        });
+      }
+    }
+    // const idToDelete = parseInt(req.params.id);
     const todo = data.filter(({id}) => id !== idToDelete);
+    
+    
     
     fs.writeFile("./treasure.txt", JSON.stringify(todo), function (err) {
       if (err) {
