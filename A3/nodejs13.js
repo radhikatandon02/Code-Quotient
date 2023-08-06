@@ -1,131 +1,101 @@
 Q1.
 
 readExtAndCopy.js
-const fs = require("fs");
+
+
+const fs = require('fs');
+
+const path = require('path');
+
+const { promisify } = require('util');
 
 
 
-const source = 'D:/Js/';
+const readdir = promisify(fs.readdir);
+
+const stat = promisify(fs.stat);
+
+const copyFile = promisify(fs.copyFile);
 
 
 
-const destination = 'D:/Js/Test';
+async function copyFilesByExtension(sourceDir, targetDir, extension) {
+
+ // Create the target directory if it doesn't exist
+
+ if (!fs.existsSync(targetDir)) {
+
+  fs.mkdirSync(targetDir);
+
+ }
 
 
 
-const extension = '.html';
+ // Read the contents of the source directory
+
+ const files = await readdir(sourceDir);
 
 
 
-function copyFilesExt(source, destination, extension)
+ // Process each file/directory
 
-{
+ for (const file of files) {
 
-  fs.readdir(source,function (err, files)
+  const filePath = path.join(sourceDir, file);
 
-  {
+  const fileStat = await stat(filePath);
 
-    if(err)
 
-    {
 
-      console.log(err);
+  if (fileStat.isDirectory()) {
 
-      return;
+   // Recursively process subdirectories
 
-    }
+   await copyFilesByExtension(filePath, targetDir, extension);
 
-    else
+  }
 
-    {
+  else if (path.extname(file) === extension) {
 
-      for(var i=0;i<files.length;i++)
+   // Copy the file to the target directory
 
-      {
+   const targetPath = path.join(targetDir, file);
 
-        file = files[i];
+   await copyFile(filePath, targetPath);
 
-        const fileDir = sourceDir+"/"+file;
+   console.log(`Copied file: ${filePath}`);
 
-        fs.stat(fileDir, function(err,stats)
+  }
 
-        {
-
-          if(err)
-
-          {
-
-            console.log(err);
-
-            return;
-
-          }
-
-          else
-
-          {
-
-            if(stats.isDirectory())
-
-            {
-
-              copyFilesExt(fileDir, destination, extension);
-
-            }
-
-            else if(fileDir.endsWith(extension))
-
-            {
-
-              fs.copyFile(fileDir, destination+"/"+file, function(err)
-
-              {
-
-                if(err)
-
-                {
-
-                  console.log(err);
-
-                  return;
-
-                }
-
-                else
-
-                {
-
-                  console.log(`${filename} copied successfully to ${destination}`);
-
-                }
-
-              });
-
-            }
-
-            else
-
-            {
-
-              console.log(" no file with the given extension exists");
-
-            }
-
-          }
-
-        });
-
-      }
-
-    }
-
-  });
+ }
 
 }
 
 
 
-copyFilesExt(source, destination, extension);
+// Usage example:
+
+const sourceDirectory = 'D:/Js';
+
+const targetDirectory = 'D:/NewJs';
+
+const fileExtension = '.html';
+
+
+
+copyFilesByExtension(sourceDirectory, targetDirectory, fileExtension)
+
+ .then(() => {
+
+  console.log('File copy completed.');
+
+ })
+
+ .catch((error) => {
+
+  console.error('An error occurred:', error);
+
+ });
 
 
 
